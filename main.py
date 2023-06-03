@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 lambd = 0.5
 
@@ -25,7 +26,7 @@ a = 50
 
 result = []
 
-fig = plt.figure()
+
 
 for t in range(10):
     result_at_t = []
@@ -76,15 +77,26 @@ for t in range(10):
                 k += 1
                 
     solved = np.linalg.solve(A, B)
-    u =0            
+    u = 0
+    for x in range(11):
+        result_at_x = []
+        for y in range(11):
+            result_at_y = []
+            for z in range(11):      
+                if (x == 0) or (x == 10) or (y == 0) or (y == 10) or (z == 0) or (z == 10):
+                    result_at_y.append(O_limit)
+                else:
+                    result_at_y.append(solved[u])
+                    u += 1
+            result_at_x.append(result_at_y)
+        result_at_t.append(result_at_x)
+    result.append(result_at_t)
 
-
-
-# print(result)
 
 for i in range(len(result)):
+    fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    sc = ax.scatter(X, Y, Z, c=np.array(result[i]).ravel(), cmap="gist_rainbow_r", vmin=0, vmax=O_limit)
+    sc = ax.scatter(X, Y, Z, c=np.array(result[i]).ravel(), cmap="gist_rainbow_r", vmin=0, vmax=O_limit, s=5)
     cbar = fig.colorbar(sc)
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
